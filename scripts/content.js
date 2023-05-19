@@ -1,4 +1,15 @@
+const getLocalStore = (key) => {
+  return chrome.storage.local.get([key]).then((result) => {
+      return result[key]
+  });
+}
+
+const setLocalStore = (key, value) => {
+  return chrome.storage.local.set({ [key]: value })
+}
+
 const toggleGrayscaleAction = (on) => {
+  setLocalStore('toggleGrayscale_on', on)
   const html = document.querySelector('html');
   if (on) {
     html.style.filter = 'grayscale(100%)';
@@ -8,12 +19,12 @@ const toggleGrayscaleAction = (on) => {
 }
 
 const main = async () => {
-  const on = await getLocalStore('toggleGrayscale_on').catch(() => false);
+  const on = Boolean(await getLocalStore('toggleGrayscale_on'));
   toggleGrayscaleAction(on);
 
   chrome.runtime.onMessage.addListener(function (message) {
     switch (message.action) {
-      case 'toggleGrayscale':
+      case 'action_toggleGrayscale':
         toggleGrayscaleAction(message.data);
         break;
 

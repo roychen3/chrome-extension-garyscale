@@ -11,16 +11,18 @@
   },
   "permissions": [
     "tabs",
-    "activeTab",
     "storage"
   ],
   "action": {
     "default_popup": "popup/index.html"
   },
+  "background": { 
+    "service_worker": "background/workers/index.js",
+    "type": "module"
+  },
   "content_scripts": [
     {
       "js": [
-        "utils/index.js",
         "scripts/content.js"
       ],
       "matches": [
